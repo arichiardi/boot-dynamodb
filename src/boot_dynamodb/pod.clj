@@ -50,11 +50,14 @@
 
 (defn start! ^DynamoDBProxyServer [opts]
   (let [args (dynamodb-cmd-line-opts opts)
-        sqlite-native-dep (:sqlite-native-dep opts)
         help? (some #{"-help"} args)]
     (try
-      (util/dbug* "Setting up Sqlite4java Native Library %s\n" sqlite-native-dep)
-      (set-sqlite-native! sqlite-native-dep)
+      (when-let [log4j-path (:log4j-path opts)]
+        (util/dbug* "Setting up log4j file %s\n" log4j-path)
+        (System/setProperty "log4j.configuration" log4j-path))
+      (when-let [sqlite-native-dep (:sqlite-native-dep opts)]
+        (util/dbug* "Setting up Sqlite4java Native Library from vector %s\n" sqlite-native-dep)
+        (set-sqlite-native! sqlite-native-dep))
       (util/dbug* "Starting server with args %s\n" (util/pp-str args))
       (reset! server
               (let [server (ServerRunner/createServerFromCommandLineArgs (into-array String args))]
