@@ -8,8 +8,10 @@
                             [adzerk/bootlaces "0.1.13" :scope "test"]
                             [org.clojure/tools.namespace "0.3.0-alpha3" :scope "test"]
                             [metosin/boot-alt-test "0.3.0" :scope "test"]
-                            [camel-snake-kebab "0.4.0" :scope "test"]
-                            [com.amazonaws/DynamoDBLocal "[1.11,2.0)" :scope "test"]]
+                            ;; AR - Leaving here for debugging in the repl
+                            ;; [camel-snake-kebab "0.4.0" :scope "test"]
+                            ;; [com.amazonaws/DynamoDBLocal "[1.11,2.0)" :scope "test"]
+                            ]
           :repositories #(conj % ["dynamodb-local-oregon" {:url "https://s3-us-west-2.amazonaws.com/dynamodb-local/release"}]))
 
 (require '[metosin.boot-alt-test :refer [alt-test]]
