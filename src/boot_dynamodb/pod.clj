@@ -16,8 +16,9 @@
 (defn dynamodb-opt-strs
   "For each key-value in input, return one or more option strings (in a
   vector)."
-  [[k v]]
+  [[k v :as opts]]
   (cond
+    (nil? opts) []
     (= :dynamodb-help k) ["-help"]
     (instance? Boolean v) (if v [(str "-" (csk/->camelCaseString k))] []) ;; no boolean? in 1.8
     (keyword? v) [(str "-" (csk/->camelCaseString k)) (name v)]

@@ -42,4 +42,6 @@
 (ns-unmap *ns* 'test)
 
 (deftask test []
+  (merge-env! :dependencies '[[camel-snake-kebab "0.4.0" :scope "test"]
+                              [com.amazonaws/DynamoDBLocal "[1.11,2.0)" :scope "test"]])
   (alt-test))

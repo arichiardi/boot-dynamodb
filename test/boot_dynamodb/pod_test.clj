@@ -4,16 +4,10 @@
             [boot-dynamodb.pod :as pod]))
 
 (deftest dynamodb-opt-str
-  (is (nil? (pod/dynamodb-opt-strs nil)))
-  (is (nil? (pod/dynamodb-opt-strs {})))
+  (is (= [] (pod/dynamodb-opt-strs nil)))
   (is (= ["-testBool"] (pod/dynamodb-opt-strs (first {:test-bool true}))))
   (is (= ["-testKeyword" "this-is-a-key"] (pod/dynamodb-opt-strs (first {:test-keyword :this-is-a-key}))))
   (is (= ["-testValue" "1"] (pod/dynamodb-opt-strs (first {:test-value 1})))))
-
-(deftest dynamodb-opt-str
-  (is (= "-Djava.library.path=./DynamoDBLocal_lib" (pod/java-prop-str (first {"java.library.path" "./DynamoDBLocal_lib"}))))
-  (is (thrown? java.lang.AssertionError (pod/java-prop-str (first {:k "./DynamoDBLocal_lib"}))))
-  (is (thrown? java.lang.AssertionError (pod/java-prop-str (first {"java.library.path" 1})))))
 
 (deftest dynamodb-cmd-line-options
   (testing "dynamodb option presence"
@@ -35,12 +29,4 @@
       (is (str/includes? s "-sharedDb"))
       (is (str/includes? s "-port 8580"))
       (is (str/includes? s "-help"))
-      (is (not (str/includes? s "Missing")))))
-
-  (testing "java option presence"
-    (let [opts (pod/java-cmd-line-opts {"java.library.path" "./DynamoDBLocal_lib"
-                                        "log4j.configuration" "conf/log4j.properties"
-                                        :key-option "Missing"})]
-      (is (filter #{"-Djava.library.path=./DynamoDBLocal_lib"} opts))
-      (is (filter #{"-Dlog4j.configuration=conf/log4j.properties"} opts))
-      (is (not-any? #(str/includes? % "Missing") opts)))))
+      (is (not (str/includes? s "Missing"))))))
